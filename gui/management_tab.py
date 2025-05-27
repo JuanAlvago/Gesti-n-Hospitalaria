@@ -107,10 +107,26 @@ class ManagementTab(QWidget):
             self.hospital_table.setRowHidden(i, text not in item.text().lower())
 
     def filter_doctors(self):
-        text = self.doctor_search.text().lower()
-        for i in range(self.doctor_table.rowCount()):
-            visible = any(text in self.doctor_table.item(i, j).text().lower() for j in range(3))
-            self.doctor_table.setRowHidden(i, not visible)
+        search_text = self.doctor_search.text().strip().lower()
+        self.doctor_table.setRowCount(0)  # Limpiar tabla
+        
+        if not search_text:
+            self.refresh_data()  # Mostrar todos si no hay búsqueda
+            return
+        
+        # Buscar coincidencias en ID o nombre
+        for doctor in self.doctor_controller.obtener_todos():
+            if (search_text in doctor.doctor_id.lower() or 
+                search_text in doctor.nombre.lower()):
+                
+                # Añadir fila con los datos del doctor
+                row_pos = self.doctor_table.rowCount()
+                self.doctor_table.insertRow(row_pos)
+                
+                # Llenar las columnas (ID, Nombre, Especialidad)
+                self.doctor_table.setItem(row_pos, 0, QTableWidgetItem(doctor.doctor_id))
+                self.doctor_table.setItem(row_pos, 1, QTableWidgetItem(doctor.nombre))
+                self.doctor_table.setItem(row_pos, 2, QTableWidgetItem(doctor.especialidad))
 
     def add_hospital(self):
         from PyQt5.QtWidgets import QInputDialog
