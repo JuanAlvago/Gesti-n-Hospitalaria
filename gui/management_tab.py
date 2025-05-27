@@ -8,8 +8,8 @@ from PyQt5.QtCore import Qt, pyqtSignal
 class ManagementTab(QWidget):
     data_updated = pyqtSignal()
 
-    def __init__(self, doctor_controller, hospital_controller):
-        super().__init__()
+    def _init_(self, doctor_controller, hospital_controller):
+        super()._init_()
         self.doctor_controller = doctor_controller
         self.hospital_controller = hospital_controller
         self.apply_styles()
@@ -102,12 +102,6 @@ class ManagementTab(QWidget):
 
     def filter_hospitals(self):
         text = self.hospital_search.text().lower()
-        for i in range(self.hospital_table.rowCount()):
-            item = self.hospital_table.item(i, 0)
-            self.hospital_table.setRowHidden(i, text not in item.text().lower())
-
-    def filter_hospitals(self):
-        text = self.hospital_search.text().lower()
         self.hospital_table.setRowCount(0)  
 
         if text:
@@ -141,6 +135,7 @@ class ManagementTab(QWidget):
         self.doctor_table.setItem(row_position, 0, QTableWidgetItem(doctor.doctor_id))
         self.doctor_table.setItem(row_position, 1, QTableWidgetItem(doctor.nombre))
         self.doctor_table.setItem(row_position, 2, QTableWidgetItem(doctor.especialidad))
+
 
     def add_hospital(self):
         from PyQt5.QtWidgets import QInputDialog
